@@ -38,6 +38,11 @@ export default function PacketUI (props: { packet: MeshPacket }) {
       status_text = `Canceled with ${ props.packet.hop_limit } hop${props.packet.hop_limit !== 1 ? 's' : '' } left by ${ props.packet.duplicates[0].relay?.short_name }`;
       break;
     }
+    case MeshPacketStatus.muted: {
+      status_icon = '🙊';
+      status_text = `Heard but not relayed due to role`;
+      break;
+    }
     case MeshPacketStatus.transmitting: {
       status_icon = '📡';
       status_text = 'Transmitting';

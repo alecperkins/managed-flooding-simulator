@@ -6,7 +6,7 @@
 // TODO: linkable network configurations
 // TODO: express the constants as frame counts instead of real time? or is real time nice because it matches real world
 
-import { MAX_DIST, MeshPacketStatus, TICK_INTERVAL, TX_TIME_MS } from './constants';
+import { MAX_DIST, MeshNodeRole, MeshPacketStatus, TICK_INTERVAL, TX_TIME_MS } from './constants';
 import MeshNode from './MeshNode';
 import MeshPacket from './MeshPacket';
 import { distBetweenNodes } from './utils';
@@ -58,8 +58,8 @@ export default class SimMesh {
     this._listeners[name] = this._listeners[name].filter(fn => fn !== handler);
   }
 
-  addNode (short_name: string, left_px = 20, top_px = 20) {
-    const node = new MeshNode({ short_name, left_px, top_px }, this);
+  addNode (short_name: string, left_px = 20, top_px = 20, role = MeshNodeRole.CLIENT) {
+    const node = new MeshNode({ short_name, left_px, top_px, role }, this);
     this.nodes.push(node);
     return node;
   }

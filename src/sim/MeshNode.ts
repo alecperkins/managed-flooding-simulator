@@ -1,22 +1,23 @@
+import { MeshNodeRole } from './constants';
 import type MeshPacket from './MeshPacket';
 import type SimMesh from './SimMesh';
 import { genKey } from './utils';
 
 export default class MeshNode {
-  key: string;
-  short_name: string;
-  role: 'CLIENT';
-  packets: Array<MeshPacket>;
-  left_px: number;
-  top_px: number;
-  world: SimMesh;
+  key         : string;
+  packets     : Array<MeshPacket>;
+  short_name  : string;
+  role        : MeshNodeRole;
+  left_px     : number;
+  top_px      : number;
+  world       : SimMesh;
 
-  constructor (attrs: Pick<MeshNode, 'short_name' | 'left_px' | 'top_px'>, world: SimMesh) {
+  constructor (attrs: Pick<MeshNode, 'short_name' | 'left_px' | 'top_px' | 'role'>, world: SimMesh) {
     this.short_name = attrs.short_name;
     this.left_px = attrs.left_px;
     this.top_px = attrs.top_px;
     this.packets = [];
-    this.role = 'CLIENT';
+    this.role = attrs.role;
     this.key = genKey();
     this.world = world;
   }

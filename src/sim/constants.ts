@@ -6,10 +6,18 @@ export const TICK_INTERVAL        = 100;      // The time resolution of the simu
 export const TX_TIME_MS           = 500;      // How long each transmission takes
 export const TX_TIMEOUT           = 30_000;   // How long until max_retransmission_reached if no ack
 
+export enum MeshNodeRole {
+  CLIENT                      = 'CLIENT',
+  CLIENT_MUTE                 = 'CLIENT_MUTE',
+  ROUTER                      = 'ROUTER',
+  ROUTER_LATE                 = 'ROUTER_LATE',
+}
+
 export enum MeshPacketStatus {
   acked                       = 'acked',                        // Has received a duplicate of its own packet
   canceled                    = 'canceled',                     // Stopped its relay countdown after hearing another duplicate first
   exhausted                   = 'exhausted',                    // The packet has no more hops
+  muted                       = 'muted',                        // The node is client_mute and will not relay
   max_retransmission_reached  = 'max_retransmission_reached',   // Never heard another node relay its own packet within the TX_TIMEOUT
   relayed                     = 'relayed',                      // Has transmitted a packet it did not originate
   transmitting                = 'transmitting',                 // Is currently transmitting a packet

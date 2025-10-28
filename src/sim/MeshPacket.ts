@@ -1,5 +1,5 @@
 import type MeshNode from './MeshNode';
-import { MAX_RELAY_DELAY_MS, MAX_TX_DELAY_MS, MeshPacketStatus, MIN_RELAY_DELAY_MS, TX_TIMEOUT } from './constants';
+import { MAX_RELAY_DELAY_MS, MAX_TX_DELAY_MS, MeshNodeRole, MeshPacketStatus, MIN_RELAY_DELAY_MS, TX_TIMEOUT } from './constants';
 import { genKey } from './utils';
 
 export default class MeshPacket {
@@ -64,7 +64,10 @@ export default class MeshPacket {
       } else if (this.transmit_started_at) {
         return MeshPacketStatus.transmitting;
       } else if (this.hop_limit > 0) {
-        if (this.duplicates.length > 0) {
+        if (this.receiver?.role === MeshNodeRole.CLIENT_MUTE) {
+          return MeshPacketStatus.muted;
+        }
+        if (this.duplicates.length > 0 && this.receiver?.role === MeshNodeRole.CLIENT) {
           return MeshPacketStatus.canceled;
         }
         return MeshPacketStatus.waiting_relay;
@@ -78,9 +81,32 @@ export default class MeshPacket {
     let delay_ms = 0;
     let delta_ms = 0;
     if (this.received_at) {
+      let min_relay_delay_ms = 0;
+      let max_relay_delay_ms = 0;
+      let snr_factor = 0;
+      switch (this.receiver!.role) {
+        case MeshNodeRole.CLIENT: {
+          min_relay_delay_ms = MIN_RELAY_DELAY_MS;
+          max_relay_delay_ms = MAX_RELAY_DELAY_MS;
+          snr_factor = this.received_snr ?? 1;
+          break;
+        }
+        case MeshNodeRole.ROUTER: {
+          min_relay_delay_ms = 0;
+          max_relay_delay_ms = MIN_RELAY_DELAY_MS;
+          snr_factor = 0;
+          break;
+        }
+        case MeshNodeRole.ROUTER_LATE: {
+          min_relay_delay_ms = MAX_RELAY_DELAY_MS;
+          max_relay_delay_ms = 0;
+          snr_factor = 0;
+          break;
+        }
+      }
       delta_ms = t.getTime() - this.received_at.getTime();
-      const rand_window = 500;
-      delay_ms = MIN_RELAY_DELAY_MS + (MAX_RELAY_DELAY_MS - MIN_RELAY_DELAY_MS - rand_window) * (this.received_snr ?? 1) + this._random * rand_window;
+      const rand_window = 500; // simulate airtime waiting
+      delay_ms = min_relay_delay_ms + (max_relay_delay_ms - min_relay_delay_ms - rand_window) * snr_factor + this._random * rand_window;
     } else {
       delta_ms = t.getTime() - this.created_at.getTime();
       delay_ms = MAX_TX_DELAY_MS // TODO: base this on currently receiving

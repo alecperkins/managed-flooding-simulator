@@ -3,21 +3,10 @@ import SimMesh from './sim/SimMesh';
 import MeshNodeUI from './components/MeshNodeUI';
 import './App.css';
 import PacketEdge from './components/PacketEdge';
+import { layoutNodes } from './sim/setup';
 
 const sim = new SimMesh();
-// sim.addNode('A', 20, 20);
-// sim.addNode('B', 100, 50);
-// sim.addNode('C', 40, 100);
-// sim.addNode('D', 200, 120);
-// sim.addNode('E', 20, 300);
-// sim.addNode('F', 250, 400);
-// sim.addNode('G', 250, 10);
-for (let i = 0; i < 26; i++) {
-  sim.addNode(String.fromCharCode(i + 65),
-    Math.floor(800 * Math.random()),
-    Math.floor(800 * Math.random()),
-  );
-}
+layoutNodes(sim, 'set');
 
 
 function App() {

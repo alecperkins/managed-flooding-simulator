@@ -8,10 +8,27 @@
   border-radius: 1em;
   border: 1px solid black;
   background-color: turquoise;
+  &[data-role="ROUTER"] {
+    background-color: orange;
+  }
+  &[data-role="ROUTER_LATE"] {
+    background-color: brown;
+  }
+  &[data-role="CLIENT_MUTE"] {
+    background-color: darkcyan;
+  }
   text-align: center;
   font-weight: bold;
   position: absolute;
   cursor: pointer;
+  ._Role {
+    position: absolute;
+    right: 80%;
+    top: -10px;
+    font-size: 0.5em;
+    z-index: 1;
+    color: #666;
+  }
   ._ShortName {
     position: relative;
     top: 0.2em;
@@ -24,6 +41,7 @@
     left: calc(100% + 5px);
     top: 0;
     pointer-events: none;
+    z-index: 2;
     li {
       padding: 0;
       margin: 0;
