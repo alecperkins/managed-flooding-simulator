@@ -81,9 +81,9 @@ function App() {
           </tbody>
         </table>
         <ul id="scenario_list">
-          <li><button onClick={() => _sendPacket('H')}>H</button>: see a complete propagation</li>
-          <li><button onClick={() => _sendPacket('J')}>J</button>: see poorly placed `ROUTER` D stop propagation</li>
-          <li><button onClick={() => _sendPacket('B')}>B</button>: see hop exhaustion</li>
+          <li><button onClick={() => _sendPacket('F')}>F</button>: see a complete propagation</li>
+          <li><button onClick={() => _sendPacket('C')}>C</button>: see poorly placed `ROUTER` D stop propagation</li>
+          <li><button onClick={() => _sendPacket('Y')}>Y</button>: see hop exhaustion</li>
           <li><button onClick={() => _sendPacket('W')}>W</button>: see `ROUTER`, `ROUTER_LATE` work properly</li>
         </ul>
         <footer>
