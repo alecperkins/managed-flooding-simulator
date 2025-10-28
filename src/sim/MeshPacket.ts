@@ -41,8 +41,12 @@ export default class MeshPacket {
     this._random = Math.random();
   }
 
+  get is_original () {
+    return this.from.key === this.receiver?.key;
+  }
+
   get status (): MeshPacketStatus {
-    if (this.from.key === this.receiver?.key) {
+    if (this.is_original) {
       if (this.transmitted_at) {
         if (this.duplicates.length > 0) {
           return MeshPacketStatus.acked;

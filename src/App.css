@@ -2,6 +2,34 @@
 
 }
 
+.SimMesh__ {
+  padding: 0 1rem;
+  margin: 0 auto;
+  width: 832px;
+  ._Header__ {
+
+  }
+  ._Canvas__ {
+    position: relative;
+    width: 800px;
+    height: 800px;
+  }
+}
+
+#scenario_list {
+  list-style-type: none;
+  padding: 0;
+
+}
+
+footer {
+  font-size: 12px;
+}
+
+.Header {
+  font-size: 16px;
+}
+
 .ClientNode {
   width: 2em;
   height: 2em;
@@ -81,8 +109,18 @@
     top: 0;
     bottom: 0;
     width: 75%;
-    background-color: orange;
+    background-color: rgb(103, 234, 148);
   }
+}
+
+table div {
+  width: 1em;
+}
+
+.EmptyStatus {
+  width: 1em;
+  height: 1em;
+  border: 1px dotted black;
 }
 
 .PacketEdge {

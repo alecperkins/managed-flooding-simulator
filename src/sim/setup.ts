@@ -12,7 +12,7 @@ const SCENARIO = [
   { "short_name": "F", "left_px": 784, "top_px": 262 },
   { "short_name": "G", "left_px": 599, "top_px": 517, role: MeshNodeRole.CLIENT_MUTE  },
   { "short_name": "H", "left_px": 188, "top_px": 273 },
-  { "short_name": "I", "left_px": 415, "top_px": 320 },
+  { "short_name": "I", "left_px": 415, "top_px": 320, role: MeshNodeRole.ROUTER_LATE },
   { "short_name": "J", "left_px": 116, "top_px": 100, role: MeshNodeRole.CLIENT_MUTE },
   { "short_name": "K", "left_px": 290, "top_px": 260 },
   { "short_name": "L", "left_px": 298, "top_px": 487 },
@@ -22,13 +22,13 @@ const SCENARIO = [
   { "short_name": "P", "left_px": 183, "top_px": 147 },
   { "short_name": "Q", "left_px": 458, "top_px": 736 },
   { "short_name": "R", "left_px": 51, "top_px": 310, role: MeshNodeRole.CLIENT_MUTE },
-  { "short_name": "S", "left_px": 479, "top_px": 583, role: MeshNodeRole.ROUTER_LATE  },
+  { "short_name": "S", "left_px": 479, "top_px": 583  },
   { "short_name": "T", "left_px": 694, "top_px": 244, role: MeshNodeRole.CLIENT_MUTE },
   { "short_name": "U", "left_px": 178, "top_px": 633, role: MeshNodeRole.CLIENT_MUTE },
   { "short_name": "V", "left_px": 338, "top_px": 708 },
   { "short_name": "W", "left_px": 144, "top_px": 437 },
   { "short_name": "X", "left_px": 635, "top_px": 53, role: MeshNodeRole.CLIENT_MUTE },
-  { "short_name": "Y", "left_px": 704, "top_px": 527 },
+  { "short_name": "Y", "left_px": 704, "top_px": 427 },
   { "short_name": "Z", "left_px": 576, "top_px": 289, role: MeshNodeRole.ROUTER } // Good router
 ];
 

@@ -3,6 +3,17 @@ import type MeshPacket from '../sim/MeshPacket';
 import { MeshPacketStatus } from '../sim/constants';
 
 export default function PacketUI (props: { packet: MeshPacket }) {
+  return (
+    <div className="Packet" data-key={ props.packet.key } data-status={props.packet.status}>
+      <div>p{props.packet.num}</div>
+      <div className='_Status'>
+        <PacketStatusIndicator packet={props.packet} countdown={true} />
+      </div>
+    </div>
+  );
+}
+
+export function PacketStatusIndicator (props: { packet: MeshPacket, countdown?: boolean }) {
 
   let status_icon: string | ReactElement = '';
   let status_text = '';
@@ -24,7 +35,11 @@ export default function PacketUI (props: { packet: MeshPacket }) {
       break;
     }
     case MeshPacketStatus.waiting_relay: {
-      status_icon = <div className="_Countdown" style={{ width: `${ props.packet.getDelay(new Date()).countdown * 100 }%` }} />;
+      if (props.countdown) {
+        status_icon = <div className="_Countdown" style={{ width: `${ props.packet.getDelay(new Date()).countdown * 100 }%` }} />;
+      } else {
+        status_icon = '⏳';
+      }
       status_text = 'Waiting to Relay';
       break;
     }
@@ -59,13 +74,9 @@ export default function PacketUI (props: { packet: MeshPacket }) {
       break;
     }
   }
-
   return (
-    <div className="Packet" data-key={ props.packet.key } data-status={props.packet.status}>
-      <div>p{props.packet.num}</div>
-      <div className="_Status" title={ status_text }>
-        { status_icon }
-      </div>
+    <div className="PacketStatusIndicator" title={ status_text }>
+      { status_icon }
     </div>
   );
 }
