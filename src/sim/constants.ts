@@ -1,7 +1,9 @@
+const is_screensaver = window.location.search === '?screensaver';
+
 export const MAX_DIST             = 250;      // The maximum distance a node can transmit
-export const MAX_RELAY_DELAY_MS   = 7000;     // The maximum amount of time a client waits to relay
-export const MAX_TX_DELAY_MS      = 1000;     // How long it waits before initial transmission
-export const MIN_RELAY_DELAY_MS   = 1000;     // The minimum amount of time a client waits to relay
+export const MAX_RELAY_DELAY_MS   = is_screensaver ? 3000 : 7000;     // The maximum amount of time a client waits to relay
+export const MAX_TX_DELAY_MS      = is_screensaver ? 500 : 1000;     // How long it waits before initial transmission
+export const MIN_RELAY_DELAY_MS   = is_screensaver ? 500 : 1000;     // The minimum amount of time a client waits to relay
 export const TICK_INTERVAL        = 100;      // The time resolution of the simulation
 export const TX_TIME_MS           = 500;      // How long each transmission takes
 export const TX_TIMEOUT           = 30_000;   // How long until max_retransmission_reached if no ack

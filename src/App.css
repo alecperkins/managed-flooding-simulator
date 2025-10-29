@@ -1,11 +1,17 @@
-#root {
+html, body {
+  padding: 0;
+  margin: 0;
+}
 
+body[data-is_screensaver="true"] {
+  overflow: hidden;
 }
 
 .SimMesh__ {
   padding: 0 1rem;
   margin: 0 auto;
   width: 832px;
+  transform-origin: top center;
   ._Header__ {
 
   }

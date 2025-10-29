@@ -1,6 +1,7 @@
 import { MeshNodeRole } from './constants';
 import MeshNode from './MeshNode';
 import type SimMesh from './SimMesh';
+import { distBetweenNodes } from './utils';
 
 
 const SCENARIO = [
@@ -45,11 +46,39 @@ const SIMPLE = [
 function randomize () {
   const nodes = [];
   for (let i = 0; i < 26; i++) {
+
+    let left_px = 0;
+    let top_px = 0;
+
+    function _place () {
+      left_px = Math.floor(800 * Math.random());
+      top_px = Math.floor(800 * Math.random());
+    }
+
+    let too_close = true;
+    while (too_close) {
+      _place();
+      if (Math.random() > 0.3) {
+        too_close = nodes.some(n => distBetweenNodes(n, { left_px, top_px }) < 50);
+      } else {
+        too_close = false;
+      }
+    }
+
+    let role = MeshNodeRole.CLIENT;
+    if (Math.random() > 0.7) {
+      role = MeshNodeRole.CLIENT_MUTE;
+    } else if (Math.random() > 0.9) {
+      role = MeshNodeRole.ROUTER_LATE;
+    } else if (Math.random() > 0.9) {
+      role = MeshNodeRole.ROUTER;
+    }
+
     nodes.push({
       short_name: String.fromCharCode(i + 65),
-      left_px: Math.floor(800 * Math.random()),
-      top_px: Math.floor(800 * Math.random()),
-      role: MeshNodeRole.CLIENT,
+      left_px,
+      top_px,
+      role,
     });
   }
   return nodes;
