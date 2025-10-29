@@ -14,7 +14,11 @@ body[data-is_screensaver="true"] {
   padding: 0 1rem;
   margin: 0 auto;
   width: 832px;
-  transform-origin: top center;
+  &[data-is_screensaver="true"] {
+    margin: 0;
+    padding: 0;
+    transform-origin: top left;
+  }
   ._Header__ {
 
   }
@@ -142,7 +146,10 @@ table div {
   display: flex !important;
 }
 .flex-grow-1 {
-  flex-grow: 1;
+  flex-grow: 1 !important;
+}
+.text-center {
+  text-align: center !important;
 }
 .text-right {
   text-align: right !important;

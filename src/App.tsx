@@ -126,7 +126,10 @@ function App() {
           <div>
             By <a href="https://k2xap.radio">Alec K2XAP</a> / <a href="https://nyme.sh">nyme.sh</a>
           </div>
-          <div className='flex-grow-1 text-right'>
+          <div className='flex-grow-1 text-center'>
+            <a href="https://github.com/alecperkins/managed-flooding-simulator">source</a>
+          </div>
+          <div className='text-right'>
             <a href="?default">?default</a> <a href="?random">?random</a> <a href="?screensaver">?screensaver</a>
           </div>
         </footer>
