@@ -6,7 +6,7 @@ import PacketUI from './PacketUI';
 export default function MeshNodeUI (props: { node: MeshNode }) {
   const is_transmitting = props.node.packets.filter(p => p.status === MeshPacketStatus.transmitting).length > 0;
   return (
-    <div className="ClientNode" data-role={props.node.role} onClick={ () => props.node.originatePacket() } style={{
+    <div className="MeshNode" data-role={props.node.role} onClick={ () => props.node.originatePacket() } style={{
       left: props.node.left_px,
       top: props.node.top_px,
     }} data-num_packets={ props.node.packets.length }>

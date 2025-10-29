@@ -7,11 +7,12 @@ import { layoutNodes } from './sim/setup';
 import { PacketStatusIndicator } from './components/PacketUI';
 
 const is_screensaver = window.location.search === '?screensaver';
+const is_random = window.location.search === '?random';
 if (is_screensaver) {
   document.body.dataset.is_screensaver = is_screensaver.toString();
 }
 const sim = new SimMesh();
-layoutNodes(sim, is_screensaver ? 'random' : 'set');
+layoutNodes(sim, is_screensaver || is_random ? 'random' : 'set');
 
 function getTransform () {
   if (!is_screensaver) { return undefined; }
@@ -121,8 +122,13 @@ function App() {
           <li><button onClick={() => _sendPacket('Y')}>Y</button>: see hop exhaustion</li>
           <li><button onClick={() => _sendPacket('W')}>W</button>: see `ROUTER`, `ROUTER_LATE` work properly</li>
         </ul>
-        <footer>
-          By <a href="https://k2xap.radio">Alec K2XAP</a> / <a href="https://nyme.sh">nyme.sh</a>
+        <footer className='d-flex'>
+          <div>
+            By <a href="https://k2xap.radio">Alec K2XAP</a> / <a href="https://nyme.sh">nyme.sh</a>
+          </div>
+          <div className='flex-grow-1 text-right'>
+            <a href="?default">?default</a> <a href="?random">?random</a> <a href="?screensaver">?screensaver</a>
+          </div>
         </footer>
       </div>}
     </div>
