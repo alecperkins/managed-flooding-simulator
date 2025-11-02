@@ -2,9 +2,15 @@ import type { ReactElement } from 'react';
 import type MeshPacket from '../sim/MeshPacket';
 import { MeshPacketStatus } from '../sim/constants';
 
-export default function PacketUI (props: { packet: MeshPacket }) {
+export default function PacketUI (props: { packet: MeshPacket, setHighlight: any, is_highlighted: boolean }) {
   return (
-    <div className="Packet" data-key={ props.packet.key } data-status={props.packet.status}>
+    <div className="Packet"
+      data-is_highlighted={ props.is_highlighted }
+      data-key={ props.packet.key }
+      data-status={ props.packet.status }
+      onMouseEnter={ () => props.setHighlight(props.packet) }
+      onMouseLeave={ () => props.setHighlight(null) }
+    >
       <div>p{props.packet.num}</div>
       <div className='_Status'>
         <PacketStatusIndicator packet={props.packet} countdown={true} />

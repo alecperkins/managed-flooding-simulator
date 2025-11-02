@@ -109,6 +109,9 @@ footer {
   display: flex;
   padding-left: 2px;
   background-color: rgba(255,255,255,0.9);
+  &[data-is_highlighted="true"] {
+    background-color: rgba(250, 204, 254, 0.9);
+  }
   ._Status {
     width: 30px;
     margin-left: 5px;

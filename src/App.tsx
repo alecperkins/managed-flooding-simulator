@@ -5,6 +5,7 @@ import './App.css';
 import PacketEdge from './components/PacketEdge';
 import { layoutNodes } from './sim/setup';
 import { PacketStatusIndicator } from './components/PacketUI';
+import MeshPacket from './sim/MeshPacket';
 
 const is_screensaver = window.location.search === '?screensaver';
 const is_random = window.location.search === '?random';
@@ -30,6 +31,7 @@ function _initPacket () {
 
 function App() {
   const [t, setT] = useState<number>(sim.last_tick);
+  const [highlighted_packet, setHighlightedPacket] = useState<MeshPacket|null>(null);
   // const [num_completed_packets, setNumCompletedPackets] = useState<number>(sim.num_completed_packets);
 
   useEffect(() => {
@@ -81,7 +83,10 @@ function App() {
         }
         {
           sim.nodes.map(node => (
-            <MeshNodeUI key={node.key} node={node} />
+            <MeshNodeUI key={node.key} node={node} highlight_packet={{
+              packet: highlighted_packet,
+              set: setHighlightedPacket,
+            }} />
           ))
         }
       </div>
@@ -106,9 +111,9 @@ function App() {
                     sim.nodes.map(n => {
                       const p = n.packets.find(p => p.num === packet.num);
                       if (p) {
-                        return <td><PacketStatusIndicator packet={ p } countdown={false} /></td>;
+                        return <td key={n.key}><PacketStatusIndicator packet={ p } countdown={false} /></td>;
                       }
-                      return <td><div className='EmptyStatus'></div></td>;
+                      return <td key={n.key}><div className='EmptyStatus'></div></td>;
                     })
                   }
                 </tr>
