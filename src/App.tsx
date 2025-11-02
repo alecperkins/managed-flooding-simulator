@@ -13,6 +13,7 @@ if (is_screensaver) {
   document.body.dataset.is_screensaver = is_screensaver.toString();
 }
 const sim = new SimMesh();
+(window as any)._sim = sim;
 layoutNodes(sim, is_screensaver || is_random ? 'random' : 'set');
 
 function getTransform () {
@@ -126,6 +127,7 @@ function App() {
           <li><button onClick={() => _sendPacket('C')}>C</button>: see poorly placed `ROUTER` D stop propagation</li>
           <li><button onClick={() => _sendPacket('Y')}>Y</button>: see hop exhaustion</li>
           <li><button onClick={() => _sendPacket('W')}>W</button>: see `ROUTER`, `ROUTER_LATE` work properly</li>
+          <li><button onClick={() => { _sendPacket('X'); _sendPacket('T') }}>X,T</button>: see collision at U</li>
         </ul>
         <footer className='d-flex'>
           <div>

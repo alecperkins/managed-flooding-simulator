@@ -17,6 +17,7 @@ export default class MeshPacket {
   relay: MeshNode | null = null;
   relayed_at: Date | null = null;
   duplicates: Array<MeshPacket> = [];
+  rx_overlapped_at: Array<Date> = [];
   private _random: number;
 
   constructor (attrs: {
@@ -68,11 +69,17 @@ export default class MeshPacket {
       } else if (this.transmit_started_at) {
         return MeshPacketStatus.transmitting;
       } else if (this.hop_limit > 0) {
+        if (this.received_snr !== null && this.received_snr < 0) {
+          return MeshPacketStatus.corrupted;
+        }
         if (this.receiver?.role === MeshNodeRole.CLIENT_MUTE) {
           return MeshPacketStatus.muted;
         }
         if (this.duplicates.length > 0 && this.receiver?.role === MeshNodeRole.CLIENT) {
           return MeshPacketStatus.canceled;
+        }
+        if (!this.received_at) {
+          return MeshPacketStatus.receiving;
         }
         return MeshPacketStatus.waiting_relay;
       } else {

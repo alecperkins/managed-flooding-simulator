@@ -1,10 +1,13 @@
-// TODO: ROUTER, ROUTER_LATE, CLIENT_MUTE roles
+// TODO: point-and-click layout editing
+// TODO: NextHop, Replay transports
+// TODO: frictionless router links
 // TODO: tx power, rx sensitivity levels
 // TODO: obstacles and attenuation
 // TODO: doubling interference and random noise
 // TODO: variable hop counts
 // TODO: linkable network configurations
-// TODO: express the constants as frame counts instead of real time? or is real time nice because it matches real world
+// TODO: express the constants as frame counts instead of real time so speed is variable
+// TODO: allow pausing, stepping through hops
 
 import { MAX_DIST, MeshNodeRole, MeshPacketStatus, TICK_INTERVAL, TX_TIME_MS } from './constants';
 import MeshNode from './MeshNode';
@@ -131,25 +134,34 @@ export default class SimMesh {
     // console.log('\n', this.packets.length, 'total', need_transmitting.length, 'need transmitting', need_transmitting.map(p => [p.receiver.short_name, p.num]))
     need_transmitting.forEach(packet => {
       // console.log(packet.receiver!.short_name, 'tx', packet.num, recipients.map(r => r.node.short_name));
+      if (packet.receiver?.incoming.size || packet.receiver?.is_sending) { // CSMA
+        return;
+      }
       packet.transmit_started_at = t;
+      packet.receiver!.is_sending = true;
+      const recipients = this._findRecipients(packet);
+      const sent = recipients.map(({ node, distance }) => {
+        if (node.is_sending) {
+          return;
+        }
+        const tx = packet.clone();
+        tx.relay = packet.receiver;
+        // console.log('transmitting', packet.num, 'from', tx.relay.short_name, 'to', node.short_name);
+        if (packet.receiver !== packet.from) { // Don't decrement if it's the first hop
+          tx.hop_limit -= 1;
+        }
+        const is_dupe = node.startPacketRx(tx, distance);
+        if (!is_dupe) {
+          this.packets.push(tx);
+        }
+        return { tx, node };
+      });
       setTimeout(() => {
-        const recipients = this._findRecipients(packet);
-        recipients.forEach(({ node, distance }) => {
-          const tx = packet.clone();
-          tx.relay = packet.receiver;
-          // console.log('transmitting', packet.num, 'from', tx.relay.short_name, 'to', node.short_name);
-          tx.received_snr = 1 - distance / MAX_DIST - Math.random() * 0.1; // TODO: attentuation
-          tx.received_at = new Date();
-          if (packet.receiver !== packet.from) { // Don't decrement if it's the first hop
-            tx.hop_limit -= 1;
-          }
-          // TODO: random noise interference
-          const is_dupe = node.rxPacket(tx);
-          if (!is_dupe) {
-            this.packets.push(tx);
-          }
-        });
         packet.transmitted_at = new Date();
+        packet.receiver!.is_sending = false;
+        sent.forEach(({ tx, node }) => {
+          node.finishPacketRx(tx);
+        });
       }, TX_TIME_MS);
     });
 
@@ -159,8 +171,8 @@ export default class SimMesh {
   private _findRecipients (packet: MeshPacket): Array<{ node: MeshNode, distance: number }> {
     const receipt_distance = MAX_DIST;
     return this.nodes.map(node => {
-      let distance = distBetweenNodes(node, packet.receiver!);
-      // distance += Math.random() * 100; // Simulate random noise by artificially lengthening the distance
+      const distance = distBetweenNodes(node, packet.receiver!);
+      // TODO: const attenuation = based on path between, obstacles
       return { node, distance };
     }).filter(({ node, distance }) => (
       distance < receipt_distance

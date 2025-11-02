@@ -1,11 +1,10 @@
 
-import { MeshPacketStatus } from '../sim/constants';
 import type MeshNode from '../sim/MeshNode';
 import type MeshPacket from '../sim/MeshPacket';
 import PacketUI from './PacketUI';
 
-  const is_transmitting = props.node.packets.filter(p => p.status === MeshPacketStatus.transmitting).length > 0;
 export default function MeshNodeUI (props: { node: MeshNode, highlight_packet: { packet: MeshPacket | null, set: (p: MeshPacket | null) => void } }) {
+  const is_transmitting = props.node.is_sending;
   return (
     <div className="MeshNode" data-role={props.node.role} onClick={ () => props.node.originatePacket() } style={{
       left: props.node.left_px,

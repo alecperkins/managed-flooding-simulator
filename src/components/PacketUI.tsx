@@ -69,6 +69,11 @@ export function PacketStatusIndicator (props: { packet: MeshPacket, countdown?: 
       status_text = 'Transmitting';
       break;
     }
+    case MeshPacketStatus.receiving: {
+      status_icon = '👂';
+      status_text = 'Receiving';
+      break;
+    }
     case MeshPacketStatus.max_retransmission_reached: {
       status_icon = '❌';
       status_text = 'Max retransmission reached';
@@ -77,6 +82,14 @@ export function PacketStatusIndicator (props: { packet: MeshPacket, countdown?: 
     case MeshPacketStatus.exhausted: {
       status_icon = '🫙';
       status_text = 'Hops exhausted';
+      break;
+    }
+    case MeshPacketStatus.corrupted: {
+      status_icon = '⛓️‍💥';
+      status_text = 'Interference'
+      if (props.packet.rx_overlapped_at.length > 0) {
+        status_text += ` (${ props.packet.rx_overlapped_at.length } collisions)`
+      }
       break;
     }
   }
