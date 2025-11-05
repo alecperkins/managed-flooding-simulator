@@ -127,6 +127,12 @@ footer {
     width: 75%;
     background-color: rgb(103, 234, 148);
   }
+  ._HeardCount {
+    &::before {
+      content: '×';
+    }
+    padding-right: 0.5em;
+  }
 }
 
 table div {

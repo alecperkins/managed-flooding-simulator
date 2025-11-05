@@ -142,10 +142,11 @@ export default class SimMesh {
       const recipients = this._findRecipients(packet);
       const sent = recipients.map(({ node, distance }) => {
         if (node.is_sending) {
-          return;
+          return null;
         }
         const tx = packet.clone();
         tx.relay = packet.receiver;
+        tx.hop_limit = Math.max(packet.hop_limit, ...packet.duplicates.map(p => p.hop_limit)); // Imitate https://github.com/meshtastic/firmware/pull/5534
         // console.log('transmitting', packet.num, 'from', tx.relay.short_name, 'to', node.short_name);
         if (packet.receiver !== packet.from) { // Don't decrement if it's the first hop
           tx.hop_limit -= 1;
@@ -159,8 +160,11 @@ export default class SimMesh {
       setTimeout(() => {
         packet.transmitted_at = new Date();
         packet.receiver!.is_sending = false;
-        sent.forEach(({ tx, node }) => {
-          node.finishPacketRx(tx);
+        sent.forEach((s) => {
+          if (s) {
+            const { tx, node } = s;
+            node.finishPacketRx(tx);
+          }
         });
       }, TX_TIME_MS);
     });

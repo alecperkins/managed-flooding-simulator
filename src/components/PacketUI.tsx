@@ -15,6 +15,9 @@ export default function PacketUI (props: { packet: MeshPacket, setHighlight: any
       <div className='_Status'>
         <PacketStatusIndicator packet={props.packet} countdown={true} />
       </div>
+      { props.packet.from !== props.packet.receiver && <div className='_HeardCount' title={ `Heard ${ props.packet.duplicates.length + 1 } times` }>
+        { props.packet.duplicates.length + 1 }
+      </div> }
     </div>
   );
 }

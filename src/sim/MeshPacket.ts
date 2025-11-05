@@ -69,8 +69,11 @@ export default class MeshPacket {
       } else if (this.transmit_started_at) {
         return MeshPacketStatus.transmitting;
       } else if (this.hop_limit > 0) {
-        if (this.received_snr !== null && this.received_snr < 0) {
-          return MeshPacketStatus.corrupted;
+        if (this.received_snr !== null) {
+          const max_snr = Math.max(this.received_snr, ...this.duplicates.map(p => p.received_snr).filter(s => s !== null))
+          if (max_snr < 0) {
+            return MeshPacketStatus.corrupted;
+          }
         }
         if (this.receiver?.role === MeshNodeRole.CLIENT_MUTE) {
           return MeshPacketStatus.muted;
@@ -120,7 +123,7 @@ export default class MeshPacket {
       delay_ms = min_relay_delay_ms + (max_relay_delay_ms - min_relay_delay_ms - rand_window) * snr_factor + this._random * rand_window;
     } else {
       delta_ms = t.getTime() - this.created_at.getTime();
-      delay_ms = MAX_TX_DELAY_MS // TODO: base this on currently receiving
+      delay_ms = MAX_TX_DELAY_MS;
     }
     return {
       delay_ms,
